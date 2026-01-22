@@ -1,10 +1,7 @@
-<html>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BMI CALCULATOR</title>
 </head>
 
@@ -12,11 +9,25 @@
 
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <label>Height (cm)</label>
-    <input name="height" type="number">
+    <input name="heightVal" type="number">
     <label>Weight (kg)</label>
-    <input name="weight" type="number">
+    <input name="weightVal" type="number">
     <input type="submit" value="Calculate">
     
-</body>
 </form>   
+</body>
+
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+$height = $_POST['heightVal'];
+$weight = $_POST['weightVal'];
+
+$bmi = $weight/(($height/100) * ($height/100));
+}
+?>
+
+<?php
+echo $bmi;
+?>
+
 </html>
