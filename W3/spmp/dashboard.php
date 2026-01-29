@@ -15,7 +15,9 @@ if(!isset($_SESSION['loggedin'])){
     <title>Week 3</title>
 </head>
 <body>
-    <h3>This is a dashboard <?php echo $_SESSION['username'] ?></h3>
+    <h2>This is a dashboard <?php echo $_SESSION['username']; ?></h2>
     <a href="about.php">About Me</a>
+    <a href="index.php">Main Page</a>
+    <a href="logout.php">Log Out</a>
 </body>
 </html>
