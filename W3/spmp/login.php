@@ -5,7 +5,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $namapengguna = $_POST['user'];
     $katalaluan = $_POST['pass'];
 
-if($namepengguna == "admin" && $katalaluan == "root"){
+if($namapengguna == "awang" && $katalaluan == "root"){
     $_SESSION['username'] = $namapengguna;
     $_SESSION['loggedin'] = true;
     header("Location:dashboard.php");
@@ -22,5 +22,3 @@ if($namepengguna == "admin" && $katalaluan == "root"){
     Password <input type="password" name="pass">
     <input type="submit" value="login">
 </form>
-<p><?php echo $error ?></p>
-    
