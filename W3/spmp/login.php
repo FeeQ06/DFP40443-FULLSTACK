@@ -7,7 +7,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
 if($namepengguna == "admin" && $katalaluan == "root"){
     $_SESSION['username'] = $namapengguna;
-    header("dashboard.php");
+    $_SESSION['loggedin'] = true;
+    header("Location:dashboard.php");
     exit();
     } else {
         $error = "Invalid user";
@@ -16,10 +17,10 @@ if($namepengguna == "admin" && $katalaluan == "root"){
 
 ?>
 
-<form method="POST">
-    Username <input type="text" name="username">
-    Password <input type="password" name="password">
-    <input type="submit">
+<form method="POST" action="login.php">
+    Username <input type="text" name="user">
+    Password <input type="password" name="pass">
+    <input type="submit" value="login">
 </form>
 <p><?php echo $error ?></p>
     
