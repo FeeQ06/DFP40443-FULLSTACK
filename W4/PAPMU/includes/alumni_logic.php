@@ -6,7 +6,7 @@ $pages = [
     'Events' => 'events.php'
 ];
 
-function generateMenu($pages){
+function generateMenu($items){
     $html = "";
     foreach ($items as $page => $url) {
         $html .= "<li><a href='url'>$page</a></li>";

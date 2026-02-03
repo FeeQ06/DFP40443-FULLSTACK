@@ -5,7 +5,7 @@ return [
     'theme_color' => '#003366',
     'version' => "1.0.0",
     'admin_user' => 'root',
-    'admin_password' => '1234'
+    'admin_pass' => '1234'
 ]
 
 ?>
