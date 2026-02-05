@@ -28,18 +28,21 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 <body style="background-color: #a4edff; <?php echo $config['theme_color']; ?>">
     <header>
         <nav>
-            <ul style='display:flex;list-style-type: style none;'>
+            <ul style='display:flexible;list-style-type: style none;'>
             <?php echo generateMenu($pages); ?>
             </ul>
         </nav>
     </header>
     
     <?php if($isLoggedIn): ?>
-    <p>Welcome <?php echo $_POST['username']; ?></p>
+    <h2>Welcome <?php echo $_POST['username']; ?></h2>
     <?php endif; ?>   
 
 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+
 <footer>
+    <hr>
+<?php echo $config['admin_email']; ?>
 </footer>
     
 </body>
