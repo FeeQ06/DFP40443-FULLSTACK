@@ -1,7 +1,6 @@
 <?php
-session_start();
-
 $loggedIn= isset($_SESSION['username']);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,16 +10,18 @@ $loggedIn= isset($_SESSION['username']);
 </head>
 <body>
     <header>
-        <nav>
-            <a href='index.php'>Home</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark text-white p-3 mb-4">
+            <a href='login.php'>Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 <?php if($loggedIn): ?>
             <a href='quiz.php'>Quiz</a>
-            <a href='logout.php'>Logout</a>
+            <a href='login.php'>Logout</a>
 <?php else: ?>
             <a href='login.php'>Login</a>
 <?php endif; ?>
 
- 
 </nav>
 </header>
 <main>
