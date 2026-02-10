@@ -1,4 +1,5 @@
 <?php
+// login.php - Entry point for the quiz system
 require_once 'config/app_config.php';
 
 $error='';
@@ -8,45 +9,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $password = htmlspecialchars($_POST['password']);
 
     if(isset($users[$username]) &&$users[$username] === $password){
-    //sekiranya nilai benar
-    header('Location: quiz.php');
+        //sekiranya benar
+        header('Location: quiz.php');
     } else {
-    //sekiranya nilai tidak benar
-    $error="Invalid Username or Password";
+        //sekiranya tidak benar
+        $error="Invalid Username or Password";
     }
 }
 
-$pageTitle = 'Login';
-require_once 'include/header.php'
 
-return[
-    'site_name' => 'PHP Knowledge Quiz',
-    'name' => 'Awang',
-    'version' => '1.0.0'
-]
+$pageTitle = 'Login';
+require_once 'includes/header.php';
 ?>
 
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Practical Work 1</title>
-    </head>
-
-    <div class="container mt-5">
-    <header>
-        <h2><strong>PHP Knowledge Questions<strong></h2>
-    </header>
-
-
-    <body>
-        <div class="container">
-        <form action="page1.php" method="POST">
-            <p>Answer ALL questions.</p>
-            <br>
-                
-                <label for="username">Enter Name: </label>
-                <input type="text" name="username" id="name">
-                <input type="submit" value="Start Quiz">
-        </form>
-    </div>
+    <h1>Welcome to the Quiz</h1>
+    <p>Enter your name to begin</p>
+        <?php if ($error): ?>
+            <?php echo $error ?>
+         <?php endif; ?>
+    <form method="POST" action="login.php">
+        Your Name:
+         <input type="text"  name="username" required>   
+          <input type="password"  name="password" required>       
+         <input type="submit" value="login">     
+        </form> </div>  
+<?php require_once 'includes/footer.php'; ?>      

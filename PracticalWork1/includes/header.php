@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $loggedIn= isset($_SESSION['username']);
 ?>
 <!DOCTYPE html>
@@ -17,9 +18,9 @@ $loggedIn= isset($_SESSION['username']);
             <a href='logout.php'>Logout</a>
 <?php else: ?>
             <a href='login.php'>Login</a>
-<?php end if; ?>
+<?php endif; ?>
 
-<?php 
+ 
 </nav>
 </header>
 <main>
