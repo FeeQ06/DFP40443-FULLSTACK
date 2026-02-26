@@ -1,4 +1,5 @@
 <?php
+require_once "config/app_config.php";
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -14,7 +15,7 @@ mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $id, $uname, $db_password, $role);
 
 if(mysqli_stmt_fetch($stmt)){
-    if($password== $db_password){
+    if($password == $db_password){
         header("Location: dashboard.php");
         exit;
     }
