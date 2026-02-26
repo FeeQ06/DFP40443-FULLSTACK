@@ -13,6 +13,7 @@
         <nav class="navbar navbar-expand-lg bg-dark text-white p-3 mb-4">
             <a class="link-light p-3" href='dashboard.php'>Dashboard</a>
             <a class='link-light p-3' href='test_connection.php'>Test Connection</a>
+            <a class='link-light p-3' href='about.php'>About</a>
             <a class='link-light p-3' href='login.php'>Logout</a>
 
 </nav>
