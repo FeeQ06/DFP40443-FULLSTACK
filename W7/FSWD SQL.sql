@@ -1,0 +1,1 @@
+SELECT * FROM users JOIN roles ON roles.id = users.role_id WHERE username=''awang''
