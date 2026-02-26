@@ -6,7 +6,7 @@
     <title>Login Page</title>
 </head>
 <body>
-    <form action="test_connection.php" method="POST">
+    <form action="dashboard.php" method="POST">
         <h2>Login/SignUp Page</h2>
         <label for="username">Username</label>
         <input type="text" name="username">
