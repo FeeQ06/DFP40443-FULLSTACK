@@ -3,24 +3,42 @@ require_once("config/app_config.php");
 $maklumat = mysqli_query($conn,"SELECT users.id, username as pengguna, email, password, name as peranan FROM spmp.users join roles on users.role_id = roles.id;") or die(mysqli_error($conn));  
 $mesej = "";
 
-if ($_SERVER["REQUEST_METHOD"]=="POST"){
+if ($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST["update_user"])){
 
     $userid = $_POST["user_id"];
 
-    $stmt = mysqli_prepare($conn, "DELETE FROM users WHERE role_id=?");
-    mysqli_stmt_bind_param($stmt, "i", $userid);
+    $stmt = mysqli_prepare($conn, "UPDATE users SET username=?, role_id=? WHERE id=?");
 
-    if(mysqli_stmt_execute($stmt)) {
-        $mesej = "<p style='color:green'>User deleted successfully.</p>";
-    } else {
-        $mesej = "<p style='color:red'>Error deleting user</p>";
-    }
+    mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
 }
+
+if(isset($_GET["edit_id"])){
+    $id = $_GET["edit_id"];
+    $stmt = mysqli_prepare($conn,"SELECT * FROM users WHERE id=?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+}
+
+$roles_result = mysqli_query($conn, "SELECT * FROM roles");
+$user_roles_result = mysqli_query($conn,"SELECT *, upper(concat(firstname, ' ', lastname)) as full_name FROM users");
+
 ?>
 
 <?php
 require_once "includes/header.php";
 ?>
+
+<h2>Edit Form</h2>
+<form>
+    Username <input type="text" name="username" value="<?php echo $result['username']; ?>"> <br><br>
+    Password <input type="password" name="password" value="<?php echo $result['password']; ?>"> <br><br>
+    Email <input type="email" name="email" value="<?php echo $result['  email']; ?>"> <br><br>
+    <label for="peranan_id">Select role:</label>
+</form>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,8 +67,7 @@ require_once "includes/header.php";
                 <td><?php echo $pengguna['peranan'] ?></td>
                 <td>
                     <form action="" method="POST">
-                        <input type="hidden" name="user_id" value="<?php echo $pengguna['id']; ?>">
-                        <input type="submit" value="DELETE" class="btn btn-outline-danger">
+                        <a href="update.php?edit_id=<?php echo $pengguna['id']; ?>" class="btn btn-outline-primary">UPDATE</a>
                     </form>
                 </td>
             </tr>

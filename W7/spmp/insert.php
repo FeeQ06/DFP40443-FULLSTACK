@@ -10,12 +10,14 @@ $HasilSQLPeranan = mysqli_query($conn, $sqlPeranan);
 $mesej="";
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $id = $_POST["id"];
     $namapengguna = $_POST["username"];
     $katalaluan = $_POST["password"];
+    $email = $_POST["email"];
     $peranan = $_POST["peranan_id"];
 
-    $arahanSQL = mysqli_prepare($conn, "INSERT INTO users (username, password, role_id) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($arahanSQL, "ssi", $namapengguna, $katalaluan, $peranan);
+    $arahanSQL = mysqli_prepare($conn, "INSERT INTO users (id, username, password, email, role_id) VALUES (?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($arahanSQL, "isssi",$id, $namapengguna, $katalaluan, $email, $peranan);
     if (mysqli_stmt_execute($arahanSQL)) {
         $mesej = "<p style='color:green;'>Data berjaya dimasukkan.</p>";
     } else {
@@ -39,6 +41,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <?php echo $mesej; ?>
     <h2>Enter New User</h2>
     <form method="POST" action="">
+        ID: <input type="text" name="id"> <br><br>
         Username <input type="text" name="username"> <br><br>
         Password <input type="password" name="password"> <br><br>
         Email <input type="email" name="email"> <br><br>
