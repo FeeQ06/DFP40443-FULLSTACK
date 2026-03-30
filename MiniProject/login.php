@@ -55,8 +55,15 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             <?php endif; ?>
 
-    <form action="process_login.php" method="POST">
-        <h2>Login/SignUp Page</h2>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4">SITS Club Event Management System</h2>        
+    <form action="dashboard.php" method="POST">
+        <h4>Login / SignUp Page</h4>
+        <br>
         <label for="username">Username</label>
         <input type="text" name="username">
         <br><br>
@@ -68,6 +75,10 @@ if (isset($_SESSION['user_id'])) {
         <input type="submit" value="Login">
 
     </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     
 </body>
 </html>

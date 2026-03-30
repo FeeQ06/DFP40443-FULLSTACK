@@ -10,7 +10,7 @@ require_once "includes/header.php";
 <body>
     <div class="container mt-5">
         <div class="text-center">
-    <h1>Welcome to the Dashboard</h1>
+    <h1>Welcome to the SITS Event Dashboard</h1>
     </div>
     </div>
 
