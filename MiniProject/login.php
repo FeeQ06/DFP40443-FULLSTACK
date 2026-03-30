@@ -74,6 +74,10 @@ if (isset($_SESSION['user_id'])) {
 
         <input type="submit" value="Login">
 
+        <div class="text-center mt-3">
+                <a href="register.php" class="text-decoration-none small">Don't have an account? Register</a>
+        </div>
+
     </form>
                     </div>
                 </div>
