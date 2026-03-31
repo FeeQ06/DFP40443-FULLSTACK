@@ -11,6 +11,7 @@
 
 <header>
         <nav class="navbar navbar-expand-lg bg-dark text-white p-3 mb-4">
+            <a class="navbar-brand text-white" href="dashboard.php">PMU-MS</a>
             <a class="link-light p-3" href='dashboard.php'>Dashboard</a>
             <a class='link-light p-3' href='login.php'>Logout</a>
 

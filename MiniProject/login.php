@@ -5,12 +5,12 @@ require_once 'config/config.php';
 
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
 
-    if ($username === '' || $password === '') {
-        $error = 'Please enter both username and password.';
+    if (empty($username) || empty($password)) {
+        echo "<script>alert('Please fill in both Username and Password before logging in.');</script>";
     } else {
         // Prepared statement - secure against SQL injection
         $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
@@ -49,20 +49,23 @@ if (isset($_SESSION['user_id'])) {
     <title>Login Page</title>
 </head>
 <body>
+
+
 <?php if ($error): ?>
-                <div class="alert alert-danger d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-triangle-fill"></i> <?= htmlspecialchars($error) ?>
-                </div>
-            <?php endif; ?>
+<div class="alert alert-danger d-flex align-items-center gap-2">
+<i class="bi bi-exclamation-triangle-fill"></i> <?= htmlspecialchars($error) ?>
+</div>
+<?php endif; ?>
 
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card mt-5">
                     <div class="card-body">
-                        <h2 class="card-title mb-4">SITS Club Event Management System</h2>        
+                        <h2 class="card-title mb-4">PMU Student Management System</h2>     
+                           
     <form action="dashboard.php" method="POST">
-        <h4>Login / SignUp Page</h4>
+        <h5>Login / SignUp Page</h5>
         <br>
         <label for="username">Username</label>
         <input type="text" name="username">
@@ -72,11 +75,8 @@ if (isset($_SESSION['user_id'])) {
         <input type="password" name="password">
         <br><br>
 
-        <input type="submit" value="Login">
-
-        <div class="text-center mt-3">
-                <a href="register.php" class="text-decoration-none small">Don't have an account? Register</a>
-        </div>
+        <input type="submit" value="Login" class="btn btn-primary btn-rounded">
+        <input type="clear" value="Reset" class="btn btn-secondary btn-rounded">
 
     </form>
                     </div>
