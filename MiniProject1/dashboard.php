@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) header("Location: index.php");
+if (!isset($_SESSION['username'])) header("Location: login.php");
 include 'config/db.php';
 
 $total_students = $conn->query("SELECT COUNT(*) as total FROM students")->fetch_assoc()['total'];
