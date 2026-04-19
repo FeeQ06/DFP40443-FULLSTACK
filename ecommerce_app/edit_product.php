@@ -1,19 +1,40 @@
 <?php
 require_once "config/db.php";
 $message = "";
-
 $messageType = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_product"])) {
     $id = $_POST["id"];
     $product_name = $_POST["product_name"];
     $price = $_POST["price"];
-    $image_path = $_POST["image_path"];
-    $description = $_POST["description"] ?? "";
+    $image_path = $_POST["current_image_path"]; 
     
-    $sql = "UPDATE products SET product_name=?, price=?, image_path=?, description=? WHERE id=?";
+    
+    if (isset($_FILES["image_path"]) && $_FILES["image_path"]["error"] == 0) {
+        $target_dir = "product_images/";
+        $file_name = basename($_FILES["image_path"]["name"]);
+        $file_extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        
+        $unique_name = uniqid() . "_" . time() . "." . $file_extension;
+        $target_file = $target_dir . $unique_name;
+        
+        $allowed_types = array("jpg", "jpeg", "png", "gif");
+        if (in_array($file_extension, $allowed_types)) {
+            if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                $image_path = $target_file;
+            } else {
+                $message = "Error: Failed to upload image.";
+                $messageType = "danger";
+            }
+        } else {
+            $message = "Error: Only JPG, JPEG, PNG & GIF files are allowed.";
+            $messageType = "danger";
+        }
+    }
+    
+    $sql = "UPDATE products SET product_name=?, price=?, image_path=? WHERE id=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sdssi", $product_name, $price, $image_path, $description, $id);
+    $stmt->bind_param("sdsi", $product_name, $price, $image_path, $id);
     
     if ($stmt->execute()) {
         $message = "Product updated successfully!";
@@ -36,22 +57,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $product = $result->fetch_assoc();
     $stmt->close();
 }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST["id"];
-    $name = $_POST["name"];
-    $description = $_POST["description"];
-    $price = $_POST["price"];
-
-    $sql = "UPDATE products SET name='$name', description='$description', price='$price' WHERE id=$id";
-    
-    if (mysqli_query($conn, $sql)) {
-        $message = "Product updated successfully!";
-    } else {
-        $message = "Error: " . mysqli_error($conn);
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -59,11 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <title>Edit Product</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Document</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -71,21 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a class="navbar-brand" href="view_product.php">
         <img src="https://freevector-images.s3.amazonaws.com/uploads/vector/preview/36682/36682.png" alt="logo" width="34" height="28" class="d-inline-block align-text-top">View Products
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-
           <a class="nav-link" href="add_product.php">Add Product</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="edit_product.php">Edit Product</a>
-          <a class="nav-link active" aria-current="page" href="add_product.php">Add Product</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="edit_product.php">Edit Product</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="delete_product.php">Delete Product</a>
@@ -95,14 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 </nav>  
 
-
 <div class="container mt-4">
     <h1 class="mb-4">Edit Product</h1>
     
     <?php if ($message): ?>
         <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
             <?php echo $message; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
     
@@ -112,11 +108,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0">Find Product to Edit</h5>
         </div>
-        <div class="card-body bg-dark text-black">
+        <div class="card-body">
             <form method="GET" action="">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="id" class="form-label text-white">Enter Product ID</label>
+                        <label for="id" class="form-label">Enter Product ID</label>
                         <input type="number" class="form-control" id="id" name="id" required placeholder="e.g., 1">
                     </div>
                     <div class="col-md-6 d-flex align-items-end">
@@ -134,10 +130,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card-header bg-success text-white">
             <h5 class="mb-0">Edit Product #<?php echo $product['id']; ?></h5>
         </div>
-        <div class="card-body bg-secondary text-white">
-            <form method="POST" action="">
+        <div class="card-body">
+            <form method="POST" action="" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
                 
+                <div class="mb-3">
+                    <label for="product_id" class="form-label">Product ID</label>
+                    <input type="text" class="form-control" id="product_id" name="product_id"
+                            value="<?php echo $product['id']; ?>" disabled>
+
                 <div class="mb-3">
                     <label for="product_name" class="form-label">Product Name *</label>
                     <input type="text" class="form-control" id="product_name" name="product_name" 
@@ -151,11 +152,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 
                 <div class="mb-3">
-                    <label for="image_path" class="form-label">Image URL</label>
-                    <input type="text" class="form-control" id="image_path" name="image_path" 
-                           value="<?php echo htmlspecialchars($product['image_path'] ?? ''); ?>"
-                           placeholder="https://example.com/image.jpg">
-                    <small class="form-text text-muted">Enter a full URL or relative path to the product image</small>
+                    <label for="image_path" class="form-label">Product Image</label>
+                    <input type="file" class="form-control" id="image_path" name="image_path" accept="image/*">
+                    <input type="hidden" name="current_image_path" value="<?php echo htmlspecialchars($product['image_path'] ?? ''); ?>">
+                    <small class="form-text text-muted">Upload JPG, PNG, or GIF images only. Leave empty to keep current image.</small>
                 </div>
                 
                 <?php if (!empty($product['image_path'])): ?>
@@ -167,12 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                          onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Image+Not+Found';">
                 </div>
                 <?php endif; ?>
-                
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" 
-                              placeholder="Enter product description"><?php echo htmlspecialchars($product['description'] ?? ''); ?></textarea>
-                </div>
                 
                 <div class="d-flex gap-2">
                     <button type="submit" name="update_product" class="btn btn-success">Update Product</button>
@@ -189,13 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="edit_product.php" class="btn btn-primary btn-sm">Try Again</a>
     </div>
     <?php endif; ?>
-
+    
+    <!-- Quick product list for reference -->
     <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-secondary text-white">
             <h5 class="mb-0">Product Reference List</h5>
         </div>
         <div class="card-body" style="max-height: 300px; overflow-y: auto;">
-            <table class="table table-sm table-striped table-hover">
+            <table class="table table-sm table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -222,23 +217,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     ?>
                 </tbody>
-            </table>
+             </table>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <div class="container mt-3">
-        <h1>Edit Product</h1>
-        <?php if ($message) { echo "<p>$message</p>"; } ?>
-        
-        <form method="POST" action="">
-            ID: <input type="text" name="id" required><br><br>
-            Name: <input type="text" name="name" required><br><br>
-            Description: <textarea name="description" required></textarea><br><br>
-        Price: <input type="number" name="price" step="0.01" required><br><br>
-        <input type="submit" value="Update Product">
-    </form>
-    </div>
 </body>
 </html>

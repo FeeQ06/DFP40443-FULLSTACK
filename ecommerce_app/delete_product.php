@@ -6,7 +6,7 @@ $product_to_delete = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["confirm_delete"])) {
     $id = $_POST["id"];
-    
+
     $sql = "DELETE FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -32,22 +32,6 @@ if (isset($_GET['id']) && !empty($_GET['id']) && !isset($_POST['confirm_delete']
     $product_to_delete = $result->fetch_assoc();
     $stmt->close();
 }
-
-require_once "config/db.php";
-$message = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST["id"];
-
-    $sql = "DELETE FROM products WHERE id=$id";
-    
-    if (mysqli_query($conn, $sql)) {
-        $message = "Product deleted successfully!";
-    } else {
-        $message = "Error: " . mysqli_error($conn);
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -55,11 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <title>Delete Product</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Document</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -74,14 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="add_product.php">Add Product</a>
-          <a class="nav-link active" aria-current="page" href="add_product.php">Add Product</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="edit_product.php">Edit Product</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="delete_product.php">Delete Product</a>
-          <a class="nav-link" href="delete_product.php">Delete Product</a>
         </li>
       </ul>
     </div>
@@ -104,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card-header bg-danger text-white">
             <h5 class="mb-0">Find Product to Delete</h5>
         </div>
-        <div class="card-body bg-dark text-white">
+        <div class="card-body">
             <form method="GET" action="">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -188,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <?php endif; ?>
     
-    <!-- Quick product list -->
+    <!-- Quick product list for reference -->
     <div class="card mt-4">
         <div class="card-header bg-secondary text-white">
             <h5 class="mb-0">Product Reference List</h5>
@@ -227,14 +206,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <div class="container mt-3">
-        <h1>Delete Product</h1>
-        <?php if ($message) { echo "<p>$message</p>"; } ?>
-        
-        <form method="POST" action="">
-            ID: <input type="text" name="id" required><br><br>
-            <input type="submit" value="Delete Product">
-        </form>
-    </div>
 </body>
 </html>
