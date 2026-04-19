@@ -38,6 +38,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $check_stmt->close();
 }
+
+    $stmt = mysqli_prepare($conn, "INSERT INTO products (id, product_name, price, image_path) VALUES (?, ?, ?, ?)");
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "ssds", $id, $product_name, $price, $image_path);
+        if (mysqli_stmt_execute($stmt)) {
+            $message = "Product added successfully!";
+        } else {
+            $message = "Error: " . mysqli_stmt_error($stmt);
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        $message = "Error: " . mysqli_error($conn);
+    }
+
+    $stmt = $conn->prepare("INSERT INTO products (id, product_name, price, image_path) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssds", $id, $product_name, $price, $image_path);
+
+    if ($stmt->execute()) {
+        $message = "Product added successfully!";
+    } else {
+        $message = "Error: " . $stmt->error;
+    }
+    $stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="image_path">Enter Image Path</label>
                 <input type="file" class="form-control" id="image_path" name="image_path" 
                        placeholder="images/product.jpg"><br>
+                <input type="file" name="image_path" id="image_path" class="form-control" required><br
                 <input type="submit" value="Add Product" class="btn btn-primary">
         </form>
         </div>

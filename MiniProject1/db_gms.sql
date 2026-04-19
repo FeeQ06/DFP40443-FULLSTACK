@@ -56,7 +56,7 @@ CREATE TABLE `students` (
   UNIQUE KEY `reg_no` (`reg_no`),
   KEY `course_id` (`course_id`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'20DPM24F1078','SADIQ SEGARAGA','sadiqsegaraga@gmail.com',8);
+INSERT INTO `students` VALUES (1,'20DPM24F1078','SADIQ SEGARAGA','sadiqsegaraga@gmail.com',8),(2,'20DIT24F1012','AWANGKU NURFIKRI BIN AWANGKU SOPHIAN','awangkunurfikri@gmail.com',1),(3,'20DIT24F1008','WAWAN BIN ABDULLAH','wawanabdullah1704@gmail.com',1),(4,'20DIT24F1079','MOHAMAD ZULFITRY BIN RAMLI','zulfitry@gmail.com',3);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-01  0:10:39
+-- Dump completed on 2026-04-02 12:28:16
